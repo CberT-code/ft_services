@@ -1,0 +1,26 @@
+# Installation Debian:BUSTER
+FROM alpine
+MAINTAINER Cbertola <cbertola@student.42.fr>
+
+#Download all packet needed
+RUN apk get update && apk get upgrade && apk add nginx php7-fpm openrc openssl
+
+COPY srcs/ var/www/
+#RUN rm var/www/html/index.nginx-debian.html
+
+VOLUME [ "/sys/fs/cgroup" ]
+RUN openrc boot
+
+#SSL
+RUN mkdir /etc/nginx/ssl
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj '/C=FR/ST=92/L=Paris/O=42/CN=cbertola' -keyout /etc/nginx/ssl/key.pem -out /etc/nginx/ssl/cert.crt
+
+#Nginx
+RUN mv var/www/default.conf /etc/nginx/conf.d/
+
+#ouverture des ports
+EXPOSE 80 443
+
+ENTRYPOINT rc-service php-fpm7 start && rc-service nginx start && sh
+
+
