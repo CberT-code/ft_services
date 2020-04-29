@@ -6,7 +6,9 @@ MAINTAINER Cbertola <cbertola@student.42.fr>
 RUN apk get update && apk get upgrade && apk add nginx php7-fpm openrc openssl
 
 COPY srcs/ var/www/
-#RUN rm var/www/html/index.nginx-debian.html
+
+RUN mkdir var/www/html
+RUN mv var/www/index.html  var/www/html
 
 VOLUME [ "/sys/fs/cgroup" ]
 RUN openrc boot
