@@ -9,8 +9,8 @@ COPY srcs/ var/www/
 
 RUN mkdir var/www/html
 RUN mv var/www/index.html  var/www/html
+RUN mkdir -p /run/nginx
 
-VOLUME [ "/sys/fs/cgroup" ]
 RUN openrc boot
 
 #SSL
@@ -23,6 +23,6 @@ RUN mv var/www/default.conf /etc/nginx/conf.d/
 #ouverture des ports
 EXPOSE 80 443
 
-ENTRYPOINT rc-service php-fpm7 start && rc-service nginx start && sh
+ENTRYPOINT service php-fpm7 start; nginx -g "daemon off;"
 
 
