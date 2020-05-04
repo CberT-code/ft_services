@@ -11,8 +11,14 @@ spec:
   ports:
     - name: http
       port: 80
+      nodePort: 80
+      targetPort: 8080
     - name: https
       port: 443
+      nodePort: 443
+      targetPort: 4430
+    - name: ssh
+      port: 22
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -31,7 +37,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: anginx
+        image: nginx
         imagePullPolicy: Never
         securityContext:
           privileged: true

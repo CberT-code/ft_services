@@ -1,3 +1,3 @@
 
-kubectl delete service anginx
-kubectl delete deployments.apps anginx
+kubectl delete service nginx
+kubectl delete deployments.apps nginx
