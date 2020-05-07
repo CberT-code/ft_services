@@ -28,7 +28,7 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj '/C=FR/ST=92/L=Par
 RUN mv var/www/default.conf /etc/nginx/conf.d/
 
 #ouverture des ports
-EXPOSE 8080 4430 22
+EXPOSE 80 443 22
 
 ENTRYPOINT service php-fpm7 start; service sshd start; nginx -g "daemon off;"
 
