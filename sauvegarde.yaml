@@ -48,17 +48,3 @@ spec:
     name: https
   selector:
     app: nginx
----
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
-metadata:
-    annotations:
-    ingress.kubernetes.io/ssl-redirect: "false" 
-  name: nginx
-spec:
-    # tls:
-    # - secretName: nginx
-  backend:
-    serviceName: nginx
-    servicePort: 80
-    servicePort: 443

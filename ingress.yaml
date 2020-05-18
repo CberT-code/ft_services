@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+  name: nginx
+spec:
+  rules:
+  - http:
+      paths:
+        - path: /wordpress/
+          backend:
+            serviceName: wordpress
+            servicePort: 5050
+        - path: /
+          backend:
+            serviceName: nginx
+            servicePort: 80
+            

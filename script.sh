@@ -10,90 +10,119 @@ then
 		minikube addons enable dashboard
 		export minikubeip=$(minikube ip)
 		echo "--> minikube has been started with metric-server ingress dashboard"
-		eval $(minikube docker-enc)
-		echo "--> docker eval running"
-		docker build -t nginx nginx/.
+
+		eval $(minikube docker-env)
+		echo "--> docker eval nginx running"
+
+		docker build -t nginx Container/nginx/.
 		echo "--> nginx has beem build"
-		kubectl apply -f deploy.yaml --record
-		echo "--> deploy has been started"
+		docker build -t phpmyadmin Container/phpmyadmin/.
+		echo "--> phpmyadmin has beem build"
+		docker build -t wordpress Container/wordpress/.
+		echo "--> wordpress has beem build"
+
+		kubectl apply -f nginx.yaml
+		echo "--> nginx deploy has been started"
+		kubectl apply -f wordpress.yaml
+		echo "--> wordpress deploy has been started"
+		kubectl apply -f phpmyadmin.yaml
+		echo "--> phpmyadmin deploy has been started"
 	fi
-elif [[ $s1 == "stop" ]]
+elif [[ $1 == "stop" ]]
 then
 	if [[ $(minikube status | grep -c "Running") != 0 ]]
 	then
+		kubectl delete -f nginx.yaml
+		echo "--> delete deploy nginx"
+		kubectl delete -f wordpress.yaml
+		echo "--> delete deploy wordpress"
+		kubectl delete -f phpmyadmin.yaml
+		echo "--> delete deploy phpmyadmin"
+		kubectl delete -f ingress.yaml
+		echo "--> delete deploy ingress"
+
 		docker rmi -f nginx
 		echo "--> rm docker image nginx"
+		docker rmi -f phpmyadmin
+		echo "--> rm docker image phpmyadmin"
+		docker rmi -f wordpress
+		echo "--> rm docker image wordpress"
+
 		minikube stop
 		echo "--> minikube was stop"
 		minikube delete
 		echo "--> minikube was deleted"
 	fi
-elif [[ $s1 == "restart" ]]
+elif [[ $1 == "restart" ]]
+then
+	if [[ $(minikube status | grep -c "Running") != 0 ]]
+	then
+		kubectl delete -f nginx.yaml
+		echo "--> delete deploy nginx"
+		kubectl delete -f wordpress.yaml
+		echo "--> delete deploy wordpress"
+		kubectl delete -f phpmyadmin.yaml
+		echo "--> delete deploy phpmyadmin"
+		kubectl delete -f ingress.yaml
+		echo "--> delete deploy phpmyadmin"
+
+		docker rmi -f nginx
+		echo "--> rm docker image nginx"
+		docker rmi -f phpmyadmin
+		echo "--> rm docker image phpmyadmin"
+		docker rmi -f wordpress
+		echo "--> rm docker image wordpress"
+
+		docker build -t nginx Container/nginx/.
+		echo "--> nginx has beem build"
+		docker build -t phpmyadmin Container/phpmyadmin/.
+		echo "--> phpmyadmin has beem build"
+		docker build -t wordpress Container/wordpress/.
+		echo "--> wordpress has beem build"
+
+		kubectl apply -f nginx.yaml
+		echo "--> nginx deploy has been started"
+		kubectl apply -f wordpress.yaml
+		echo "--> wordpress deploy has been started"
+		kubectl apply -f phpmyadmin.yaml
+		echo "--> phpmyadmin deploy has been started"
+		kubectl apply -f ingress.yaml
+		echo "--> phpmyadmin deploy has been started"
+	fi
+elif [[ $1 == "dockerstart" ]]
+then
+	if [[ $(minikube status | grep -c "Running") != 0 ]]
+	then
+		eval $(minikube docker-enc)
+		echo "--> docker eval nginx running"
+
+		docker build -t nginx Container/nginx/.
+		echo "--> nginx has beem build"
+		docker build -t phpmyadmin Container/phpmyadmin/.
+		echo "--> phpmyadmin has beem build"
+		docker build -t wordpress Container/wordpress/.
+		echo "--> wordpress has beem build"
+	fi
+elif [[ $1 == "dockerstop" ]]
 then
 	if [[ $(minikube status | grep -c "Running") != 0 ]]
 	then
 		docker rmi -f nginx
 		echo "--> rm docker image nginx"
-		minikube stop
-		echo "--> minikube was stop"
-		minikube delete
-		echo "--> minikube was deleted"
-	elif [[ $(minikube status | grep -c "Running") == 0 ]]
-	then
-		minikube start
-		minikube addons enable metrics-server
-		minikube addons enable ingress
-		minikube addons enable dashboard
-		export minikubeip=$(minikube ip)
-		echo "--> minikube was start"
-		docker build -t nginx nginx/.
-		kubectl apply -f deploy.yaml
+		docker rmi -f phpmyadmin
+		echo "--> rm docker image phpmyadmin"
+		docker rmi -f wordpress
+		echo "--> rm docker image wordpress"
 	fi
-elif [[ $s1 == "service" ]]
+elif [[ $1 == "restartyaml" ]]
 then
-	if [[ $s2 == "start" ]]
-	then
-		kubectl apply -f deploy.yaml
-	elif [[ $s2 == "stop" ]]
-	then
-		kubectl delete service nginx
-		kubectl delete deployments.apps nginx
-	elif [[ $s2 == "restart" ]]
-	then
-		kubectl delete service nginx
-		kubectl delete deployments.apps nginx
-		kubectl apply -f deploy.yaml
-	fi
-elif [[ $s1 == "ingress" ]]
-then
-	if [[ $s2 == "start" ]]
-	then
-		kubectl apply -f ingress-deploy.yaml
-	elif [[ $s2 == "stop" ]]
-	then
-		kubectl delete ingress ingress-nginx
-	elif [[ $s2 == "restart" ]]
-	then
-		kubectl delete ingress ingress-nginx
-		kubectl apply -f ingress-deploy.yaml
-	fi
-elif [[ $s1 == "all" ]]
-then
-	if [[ $s2 == "start" ]]
-	then
-		kubectl apply -f deploy.yaml
-		kubectl apply -f ingress-deploy.yaml
-	elif [[ $s2 == "stop" ]]
-	then
-		kubectl delete ingress ingress-nginx
-		kubectl delete service nginx
-		kubectl delete deployments.apps nginx
-	elif [[ $s2 == "restart" ]]
-	then
-		kubectl delete service nginx
-		kubectl delete ingress ingress-nginx
-		kubectl delete deployments.apps nginx
-		kubectl apply -f deploy.yaml
-		kubectl apply -f ingress-deploy.yaml
-	fi	
+		kubectl delete -f nginx.yaml
+		kubectl delete -f wordpress.yaml
+		kubectl delete -f phpmyadmin.yaml
+		kubectl delete -f ingress.yaml
+
+		kubectl apply -f nginx.yaml
+		kubectl apply -f wordpress.yaml
+		kubectl apply -f phpmyadmin.yaml
+		kubectl apply -f ingress.yaml
 fi
