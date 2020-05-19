@@ -1,4 +1,0 @@
-kubectl apply -f ./deploy-ingress.yaml --record
-kubectl expose deployment monnginx --type=NodePort --port=8080
-kubectl get service monnginx
-minikube service monnginx --url
