@@ -20,6 +20,8 @@ then
 		echo "--> phpmyadmin has beem build"
 		docker build -t wordpress Container/wordpress/.
 		echo "--> wordpress has beem build"
+		docker build -t mysql Container/mysql/.
+		echo "--> mysql has beem build"
 
 		kubectl apply -f nginx.yaml
 		echo "--> nginx deploy has been started"
@@ -27,6 +29,8 @@ then
 		echo "--> wordpress deploy has been started"
 		kubectl apply -f phpmyadmin.yaml
 		echo "--> phpmyadmin deploy has been started"
+		kubectl apply -f mysql.yaml
+		echo "--> mysql deploy has been started"
 	fi
 elif [[ $1 == "stop" ]]
 then
@@ -40,6 +44,8 @@ then
 		echo "--> delete deploy phpmyadmin"
 		kubectl delete -f ingress.yaml
 		echo "--> delete deploy ingress"
+		kubectl delete -f mysql.yaml
+		echo "--> mysql deploy ingress"
 
 		docker rmi -f nginx
 		echo "--> rm docker image nginx"
@@ -47,6 +53,8 @@ then
 		echo "--> rm docker image phpmyadmin"
 		docker rmi -f wordpress
 		echo "--> rm docker image wordpress"
+		docker rmi -f mysql
+		echo "--> rm docker image mysql"
 
 		minikube stop
 		echo "--> minikube was stop"
@@ -65,6 +73,8 @@ then
 		echo "--> delete deploy phpmyadmin"
 		kubectl delete -f ingress.yaml
 		echo "--> delete deploy phpmyadmin"
+		kubectl delete -f mysql.yaml
+		echo "--> delete deploy mysql"
 
 		docker rmi -f nginx
 		echo "--> rm docker image nginx"
@@ -72,6 +82,8 @@ then
 		echo "--> rm docker image phpmyadmin"
 		docker rmi -f wordpress
 		echo "--> rm docker image wordpress"
+		docker rmi -f mysql
+		echo "--> rm docker image mysql"
 
 		docker build -t nginx Container/nginx/.
 		echo "--> nginx has beem build"
@@ -79,6 +91,8 @@ then
 		echo "--> phpmyadmin has beem build"
 		docker build -t wordpress Container/wordpress/.
 		echo "--> wordpress has beem build"
+		docker build -t mysql Container/mysql/.
+		echo "--> mysql has beem build"
 
 		kubectl apply -f nginx.yaml
 		echo "--> nginx deploy has been started"
@@ -88,6 +102,8 @@ then
 		echo "--> phpmyadmin deploy has been started"
 		kubectl apply -f ingress.yaml
 		echo "--> phpmyadmin deploy has been started"
+		kubectl apply -f mysql.yaml
+		echo "--> mysql deploy has been started"
 	fi
 elif [[ $1 == "dockerstart" ]]
 then
@@ -102,6 +118,8 @@ then
 		echo "--> phpmyadmin has beem build"
 		docker build -t wordpress Container/wordpress/.
 		echo "--> wordpress has beem build"
+		docker build -t wordpress Container/mysql/.
+		echo "--> mysql has beem build"
 	fi
 elif [[ $1 == "dockerstop" ]]
 then
@@ -113,6 +131,8 @@ then
 		echo "--> rm docker image phpmyadmin"
 		docker rmi -f wordpress
 		echo "--> rm docker image wordpress"
+		docker rmi -f mysql
+		echo "--> rm docker image mysql"
 	fi
 elif [[ $1 == "restartyaml" ]]
 then
@@ -125,4 +145,5 @@ then
 		kubectl apply -f wordpress.yaml
 		kubectl apply -f phpmyadmin.yaml
 		kubectl apply -f ingress.yaml
+		kubectl apply -f mysql.yaml
 fi

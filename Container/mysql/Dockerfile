@@ -18,5 +18,6 @@ mysql -u root -e "FLUSH PRIVILEGES"
 
 VOLUME ["/var/lib/mysql"]
 
-ENTRYPOINT service mariadb restart; tail -f /dev/null;
 EXPOSE 3306
+
+ENTRYPOINT service mariadb restart; tail -f /dev/null;
