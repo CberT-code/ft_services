@@ -93,7 +93,7 @@ elif [[ $1 == "dockerstart" ]]
 then
 	if [[ $(minikube status | grep -c "Running") != 0 ]]
 	then
-		eval $(minikube docker-enc)
+		eval $(minikube docker-env)
 		echo "--> docker eval nginx running"
 
 		docker build -t nginx Container/nginx/.

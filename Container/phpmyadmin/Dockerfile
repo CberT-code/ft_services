@@ -9,19 +9,14 @@ RUN apk get update && \
         php7-zlib php7-curl php7-mbstring php7-json php7-session \
         openrc openssl openssh sudo 
 
-# RUN adduser -D -u 1000 "admin"
-# RUN echo "admin:adminmdp" | chpasswd
-
-
-# COPY srcs/ var/www/
-
+RUN adduser -D -u 1000 "admin"
+RUN echo "admin:adminmdp" | chpasswd
 RUN mkdir var/www
-
-#RUN openrc boot
+COPY srcs/ var/www/
+RUN openrc boot
 
 #ouverture des ports
 EXPOSE 5000
-
 ENTRYPOINT service php-fpm7 start; php -S 0.0.0.0:5000 -t /var/www/
 
 
