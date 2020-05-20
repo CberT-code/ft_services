@@ -16,8 +16,6 @@ RUN mkdir var/www/
 
 COPY srcs/ var/www/
 
-
-
 RUN openrc boot
 
 # #ouverture des ports

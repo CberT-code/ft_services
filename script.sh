@@ -62,28 +62,28 @@ clean_dockers() {
 
 add_yaml() {
 	print_msg $INFORMATION "Adding services..."
-	kubectl apply -f Yaml/nginx.yaml
+	kubectl apply -f Yaml/nginx.yaml > /dev/null
 	print_msg $SUCCESS "nginx added."
-	kubectl apply -f Yaml/phpmyadmin.yaml
+	kubectl apply -f Yaml/phpmyadmin.yaml > /dev/null
 	print_msg $SUCCESS "phpmyadmin added."
-	kubectl apply -f Yaml/wordpress.yaml
+	kubectl apply -f Yaml/wordpress.yaml > /dev/null 
 	print_msg $SUCCESS "wordpress added."
-	kubectl apply -f Yaml/mysql.yaml
+	kubectl apply -f Yaml/mysql.yaml > /dev/null
 	print_msg $SUCCESS "mysql added."
-	kubectl apply -f Yaml/ingress.yaml
+	kubectl apply -f Yaml/ingress.yaml > /dev/null
 	print_msg $SUCCESS "ingress added."
 	print_msg $INFORMATION "All services added."
 }
 
 add_dockers() {
 	print_msg $INFORMATION "Adding dockers..."
-	docker build -t nginx Container/nginx/.
+	docker build -t nginx Container/nginx/. > /dev/null
 	print_msg $SUCCESS "Docker nginx added."
-	docker build -t phpmyadmin Container/phpmyadmin/.
+	docker build -t phpmyadmin Container/phpmyadmin/. > /dev/null
 	print_msg $SUCCESS "Docker phpmyadmin added."
-	docker build -t wordpress Container/wordpress/.
+	docker build -t wordpress Container/wordpress/. > /dev/null
 	print_msg $SUCCESS "Docker wordpress added."
-	docker build -t wordpress Container/mysql/.
+	docker build -t mysql Container/mysql/.  > /dev/null
 	print_msg $SUCCESS "Docker mysql added."
 	print_msg $INFORMATION "All dockers added."
 }
@@ -104,12 +104,12 @@ if [[ $1 == "" ]]
 then
 	if [[ $(minikube status | grep -c "Running") == 0 ]]
 	then
-		minikube start
-		minikube addons enable metrics-server
-		minikube addons enable ingress
-		minikube addons enable dashboard
+		minikube start > /dev/null
+		minikube addons enable metrics-server > /dev/null
+		minikube addons enable ingress > /dev/null
+		minikube addons enable dashboard > /dev/null
 
-		export minikubeip=$(minikube ip)
+		export minikubeip=$(minikube ip) 
 		print_msg $SUCCESS  "--> minikube has been started with metric-server ingress dashboard"
 
 		eval $(minikube docker-env)
@@ -118,6 +118,7 @@ then
 		add_dockers
 		add_yaml
 
+		print_msg $RESET $minikubeip
 	else print_msg $INFORMATION "Minikube is already started"
 	fi
 elif [[ $1 == "stop" ]]
@@ -190,18 +191,4 @@ then
 			clean_yaml
 			add_yaml
 		fi
-elif  [[ $1 == "restartyaml" ]]
-then
-		check_running
-
-		kubectl delete -f Yaml/nginx.yaml
-		kubectl delete -f Yaml/wordpress.yaml
-		kubectl delete -f Yaml/phpmyadmin.yaml
-		kubectl delete -f Yaml/ingress.yaml
-
-		kubectl apply -f Yaml/nginx.yaml
-		kubectl apply -f Yaml/wordpress.yaml
-		kubectl apply -f Yaml/phpmyadmin.yaml
-		kubectl apply -f Yaml/ingress.yaml
-		kubectl apply -f Yaml/mysql.yaml
 fi

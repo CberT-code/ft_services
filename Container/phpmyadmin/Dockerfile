@@ -7,7 +7,8 @@ RUN apk get update && \
     apk get upgrade && \
     apk add php7 php7-fpm php7-opcache php7-gd php7-mysqli \
         php7-zlib php7-curl php7-mbstring php7-json php7-session \
-        openrc openssl openssh sudo 
+        openrc openssl openssh sudo \
+        mysql-client busybox-extras
 
 RUN adduser -D -u 1000 "admin"
 RUN echo "admin:adminmdp" | chpasswd
