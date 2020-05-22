@@ -10,8 +10,6 @@ RUN apk get update && \
         openrc openssl openssh sudo \
         mysql-client busybox-extras
 
-RUN adduser -D -u 1000 "admin"
-RUN echo "admin:adminmdp" | chpasswd
 RUN mkdir var/www
 COPY srcs/ var/www/
 RUN openrc boot

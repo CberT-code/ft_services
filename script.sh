@@ -70,6 +70,8 @@ add_yaml() {
 	print_msg $SUCCESS "wordpress added."
 	kubectl apply -f Yaml/mysql.yaml > /dev/null
 	print_msg $SUCCESS "mysql added."
+	kubectl apply -f Yaml/ftps.yaml > /dev/null
+	print_msg $SUCCESS "ftps added."
 	kubectl apply -f Yaml/ingress.yaml > /dev/null
 	print_msg $SUCCESS "ingress added."
 	print_msg $INFORMATION "All services added."
@@ -83,6 +85,8 @@ add_dockers() {
 	print_msg $SUCCESS "Docker phpmyadmin added."
 	docker build -t wordpress Container/wordpress/. > /dev/null
 	print_msg $SUCCESS "Docker wordpress added."
+	docker build -t ftps Container/ftps/.  > /dev/null
+	print_msg $SUCCESS "Docker ftps added."
 	docker build -t mysql Container/mysql/.  > /dev/null
 	print_msg $SUCCESS "Docker mysql added."
 	print_msg $INFORMATION "All dockers added."
@@ -98,64 +102,67 @@ check_running() {
 	fi
 }
 
+# Minikube start
+
+minikube_start(){
+	minikube start --vm-driver=virtualbox --cpus=4 --memory=5000m
+	minikube addons enable metrics-server
+	minikube addons enable ingress
+	minikube addons enable dashboard
+
+	export minikubeip=$(minikube ip)
+	print_msg $SUCCESS  "--> minikube has been started with metric-server ingress dashboard"
+	
+	sed -i '' '40d' Container/ftps/srcs/vsftpd.conf | echo  "pasv_address=${minikubeip}" >> Container/ftps/srcs/vsftpd.conf
+
+	eval $(minikube docker-env)
+	print_msg $SUCCESS "--> docker eval nginx running"
+}
+
+minikube_stop(){
+	clean_yaml
+	clean_dockers
+
+	minikube stop
+	print_msg $SUCCESS "--> minikube was stop"
+	minikube delete
+	print_msg $SUCCESS "--> minikube was deleted"
+}
+
 # START OF THE SCRIPT
 
 if [[ $1 == "" ]]
 then
 	if [[ $(minikube status | grep -c "Running") == 0 ]]
 	then
-		minikube start > /dev/null
-		minikube addons enable metrics-server > /dev/null
-		minikube addons enable ingress > /dev/null
-		minikube addons enable dashboard > /dev/null
-
-		export minikubeip=$(minikube ip) 
-		print_msg $SUCCESS  "--> minikube has been started with metric-server ingress dashboard"
-
-		eval $(minikube docker-env)
-		print_msg $SUCCESS "--> docker eval nginx running"
+		
+		minikube_start
 
 		add_dockers
 		add_yaml
 
 		print_msg $RESET $minikubeip
+
 	else print_msg $INFORMATION "Minikube is already started"
 	fi
+
 elif [[ $1 == "stop" ]]
 then
 		check_running
 
-		clean_yaml
-		clean_dockers
-
-		minikube stop
-		print_msg $SUCCESS "--> minikube was stop"
-		minikube delete
-		print_msg $SUCCESS "--> minikube was deleted"
+		minikube_stop
 	
 elif [[ $1 == "restart" ]]
 then
 		check_running
 
-		clean_yaml
-		clean_dockers
-		minikube stop
-		print_msg $SUCCESS "--> minikube was stop"
-		minikube delete
-		print_msg $SUCCESS "--> minikube was deleted"
+		minikube_stop
+		minikube_start
 
-		minikube start
-		minikube addons enable metrics-server
-		minikube addons enable ingress
-		minikube addons enable dashboard
-
-		export minikubeip=$(minikube ip)
-		print_msg $SUCCESS  "--> minikube has been started with metric-server ingress dashboard"
-
-		eval $(minikube docker-env)
-		print_msg $SUCCESS "--> docker eval nginx running"
 		add_dockers
 		add_yaml
+
+		print_msg $RESET $minikubeip
 
 elif [[ $1 == "dockers" ]]
 then
