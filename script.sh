@@ -40,6 +40,10 @@ clean_yaml() {
 	print_msg $SUCCESS "wordpress cleaned."
 	kubectl delete -f Yaml/mysql.yaml
 	print_msg $SUCCESS "mysql cleaned."
+	kubectl delete -f Yaml/influxdb.yaml
+	print_msg $SUCCESS "influxdb cleaned."
+	kubectl delete -f Yaml/grafana.yaml
+	print_msg $SUCCESS "grafana cleaned."
 	kubectl delete -f Yaml/ingress.yaml
 	print_msg $SUCCESS "ingress cleaned."
 	print_msg $INFORMATION "All services cleaned."
@@ -55,6 +59,12 @@ clean_dockers() {
 	print_msg $SUCCESS "Docker wordpress cleaned."
 	docker rmi -f mysql
 	print_msg $SUCCESS "Docker mysql cleaned."
+	docker rmi -f ftps
+	print_msg $SUCCESS "Docker ftps cleaned."
+	docker rmi -f influxdb
+	print_msg $SUCCESS "Docker influxdb cleaned."
+	docker rmi -f grafana
+	print_msg $SUCCESS "Docker grafana cleaned."
 	print_msg $INFORMATION "All dockers cleaned."
 }
 
@@ -72,6 +82,10 @@ add_yaml() {
 	print_msg $SUCCESS "mysql added."
 	kubectl apply -f Yaml/ftps.yaml > /dev/null
 	print_msg $SUCCESS "ftps added."
+	kubectl apply -f Yaml/influxdb.yaml > /dev/null
+	print_msg $SUCCESS "influxdb added."
+	kubectl apply -f Yaml/grafana.yaml > /dev/null
+	print_msg $SUCCESS "grafana added."
 	kubectl apply -f Yaml/ingress.yaml > /dev/null
 	print_msg $SUCCESS "ingress added."
 	print_msg $INFORMATION "All services added."
@@ -89,6 +103,10 @@ add_dockers() {
 	print_msg $SUCCESS "Docker ftps added."
 	docker build -t mysql Container/mysql/.  > /dev/null
 	print_msg $SUCCESS "Docker mysql added."
+	docker build -t influxdb Container/influxdb/.  > /dev/null
+	print_msg $SUCCESS "Docker influxdb added."
+	docker build -t grafana Container/grafana/.  > /dev/null
+	print_msg $SUCCESS "Docker grafana added."
 	print_msg $INFORMATION "All dockers added."
 }
 
@@ -105,7 +123,7 @@ check_running() {
 # Minikube start
 
 minikube_start(){
-	minikube start --vm-driver=virtualbox --cpus=4 --memory=5000m
+	minikube start  #--vm-driver=virtualbox --cpus=4 --memory=5000m
 	minikube addons enable metrics-server
 	minikube addons enable ingress
 	minikube addons enable dashboard
@@ -168,15 +186,15 @@ elif [[ $1 == "dockers" ]]
 then
 		check_running
 
-		if $2 == "build" 
+		if [[ $2 == "build" ]]
 		then
 			add_dockers
 		fi
-		if $2 == "rmi"
+		if [[ $2 == "rmi" ]]
 		then
 			clean_dockers
 		fi
-		if $2 == "restart"
+		if [[ $2 == "restart" ]]
 		then
 			clean_dockers
 			add_dockers
@@ -185,15 +203,15 @@ elif [[ $1 == "yaml" ]]
 then
 		check_running
 
-		if $2 == "apply" 
+		if [[ $2 == "apply" ]]
 		then
 			add_yaml
 		fi
-		if $2 == "delete"
+		if [[ $2 == "delete" ]]
 		then
-			clean_yaml
+			 clean_yaml
 		fi
-		if $2 == "restart"
+		if [[ $2 == "restart" ]]
 		then
 			clean_yaml
 			add_yaml

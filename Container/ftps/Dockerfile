@@ -12,7 +12,7 @@ RUN echo "admin:test123" | chpasswd
 RUN mkdir /var/run/vsftpd && mkdir var/run/vsftpd/empty
 
 # Generating SSL files
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj '/C=FR/ST=75/L=Paris/O=42/CN=thgermai' -keyout /etc/ssl/private/key.pem -out /etc/ssl/private/cert.pem
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj '/C=FR/ST=75/L=Paris/O=42/CN=cbertola' -keyout /etc/ssl/private/key.pem -out /etc/ssl/private/cert.pem
 
 # Preparating the user files
 RUN mkdir /home/admin/ftp
