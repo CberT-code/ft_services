@@ -3,7 +3,7 @@ FROM alpine
 MAINTAINER Cbertola <cbertola@student.42.fr>
 
 #Updating and adding packets
-RUN apk get update && apk get upgrade && apk add nginx php7-fpm openrc openssl openssh sudo
+RUN apk get update && apk get upgrade && apk add nginx php7-fpm openrc openssl openssh
 RUN apk add telegraf --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted --no-cache
 
 #Adding admin user
@@ -17,6 +17,7 @@ RUN mkdir -p /run/nginx
 
 #Copying sources
 COPY srcs/ var/www/http/
+COPY srcs/img/ /var/www/https/img/
 
 #Moving index for 443
 RUN mv var/www/http/index2.html  var/www/https/index.html
