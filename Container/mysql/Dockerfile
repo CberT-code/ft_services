@@ -9,6 +9,7 @@ RUN apk add telegraf --repository http://dl-3.alpinelinux.org/alpine/edge/testin
 #Copying mysql telegraf configuration and run
 COPY /srcs/my.cnf /etc/mysql/
 COPY /srcs/run.sh /root
+COPY /srcs/wordpress.sql /root
 COPY /srcs/telegraf.conf /etc/telegraf.conf.d/
 
 #Mounting Volume for openrc and mysqlDB

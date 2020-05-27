@@ -1,0 +1,41 @@
+.body{
+    background-color: black;
+    padding-top: 5%;
+}
+
+.body h1{
+    text-align: center;
+    color: white;
+}
+
+.services{
+    margin-top: 10em;
+    height: auto;
+    width: 100%;
+    align-content: center;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.service{
+    float: left;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 2em;
+    border-radius: 100%;
+    text-align: center;
+    padding: 5em;
+    background-color: white;
+}
+
+.service h2{
+    color: grey;
+    width: 10em;
+}
+
+.service img{
+    width: 10em;
+
+}

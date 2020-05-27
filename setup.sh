@@ -19,10 +19,10 @@ clean_yaml() {
 	for i in "${array[@]}"
 	do
 		kubectl delete -f Yaml/$i.yaml
-		print_msg $SUCCESS "$i.yaml cleaned."
+		print_msg $ERROR "$i.yaml cleaned."
 	done
 	kubectl delete -f Yaml/ingress.yaml > /dev/null
-	print_msg $SUCCESS "ingress.yaml cleaned."
+	print_msg $ERROR "ingress.yaml cleaned."
 	print_msg $INFORMATION "All services cleaned."
 }
 
@@ -31,7 +31,7 @@ clean_dockers() {
 	for i in "${array[@]}"
 	do
 		docker rmi -f $i
-		print_msg $SUCCESS "Docker $i cleaned."
+		print_msg $ERROR "Docker $i cleaned."
 	done
 	print_msg $INFORMATION "All dockers cleaned."
 }
@@ -63,7 +63,7 @@ add_dockers() {
 check_running() {
 	if [[ $(minikube status | grep -c "Running") == 0 ]]
 	then
-		print_msg $INFORMATION "Minikube is not started"
+		print_msg $ERROR "Minikube is not started"
 		exit
 	fi
 }
@@ -72,22 +72,20 @@ check_running() {
 
 minikube_start(){
 	print_msg $INFORMATION "Starting Minikube"
-	minikube start > /dev/null  #--vm-driver=virtualbox --cpus=4 --memory=5000m 
+	minikube start --vm-driver=virtualbox --cpus=4 --memory=5000m > /dev/null
 	minikube addons enable metrics-server
 	minikube addons enable ingress
 	minikube addons enable dashboard
 
 	export minikubeip=$(minikube ip)
 	sed -i '' '40d' Container/ftps/srcs/vsftpd.conf | echo  "pasv_address=${minikubeip}" >> Container/ftps/srcs/vsftpd.conf
+	sed "s/ipminikube/${minikubeip}/g" Container/mysql/srcs/origine.sql > Container/mysql/srcs/wordpress.sql
 	eval $(minikube docker-env)
 	
 	print_msg $SUCCESS  "--> minikube has been started"
 }
 
 minikube_stop(){
-	clean_yaml
-	clean_dockers
-
 	minikube stop
 	print_msg $SUCCESS "--> minikube was stop"
 	minikube delete
@@ -105,7 +103,7 @@ then
 
 		add_dockers
 		add_yaml
-
+		
 		print_msg $RESET $minikubeip
 
 	else print_msg $INFORMATION "Minikube is already started"
