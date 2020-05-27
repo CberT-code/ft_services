@@ -2,15 +2,27 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
   name: ingresshttps
 spec:
   rules:
   - http:
       paths:
+        - path: /wordpress/
+          backend:
+            serviceName: wordpress
+            servicePort: 5050
         - path: /
           backend:
             serviceName: nginx
             servicePort: 443
+        - path: /phpmyadmin/
+          backend:
+            serviceName: phpmyadmin
+            servicePort: 5000
+        - path: /grafana/
+          backend:
+            serviceName: grafana
+            servicePort: 3000
+            
             

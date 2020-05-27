@@ -1,20 +1,24 @@
 FROM alpine
 MAINTAINER Cbertola <cbertola@student.42.fr>
 
+#Updating and adding packages
 RUN apk update
 RUN apk add openrc sudo influxdb
-RUN apk add telegraf --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted --no-cache
+RUN apk add telegraf --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted
+
+#Mounting Volume for openrc and influxDB
+VOLUME ["/sys/fs/cgroup"]
+VOLUME ["/var/lib/influxdb"]
 
 RUN openrc boot
 
-COPY /srcs/run.sh /root
+#Copying telegraf and influxdb configurations
+COPY /srcs/run.sh /root/
 COPY /srcs/telegraf.conf /etc/telegraf.conf.d/
-COPY /srcs/influxdb.conf /root
+COPY /srcs/influxdb.conf /etc/
 
-VOLUME ["/sys/fs/cgroup"]
-
-VOLUME ["/var/lib/influxdb"]
-
+#Exposing port
 EXPOSE 3000
 
+#Start container with
 ENTRYPOINT  sh /root/run.sh;
