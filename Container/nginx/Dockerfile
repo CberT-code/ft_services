@@ -4,7 +4,7 @@ MAINTAINER Cbertola <cbertola@student.42.fr>
 
 #Download all packet needed
 RUN apk get update && apk get upgrade && apk add nginx php7-fpm openrc openssl openssh sudo
-
+RUN apk add telegraf --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted --no-cache
 RUN adduser -D -u 1000 "admin"
 RUN echo "admin:adminmdp" | chpasswd
 
@@ -26,8 +26,10 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj '/C=FR/ST=92/L=Par
 
 #Nginx
 RUN mv var/www/http/default.conf /etc/nginx/conf.d/
+COPY /srcs/telegraf.conf /etc/telegraf.conf.d/
+VOLUME ["/sys/fs/cgroup"]
 
 #ouverture des ports
 EXPOSE 80 443 22
 
-ENTRYPOINT service php-fpm7 start; service sshd start; nginx -g "daemon off;";
+ENTRYPOINT service php-fpm7 start; service sshd start; service telegraf start; nginx -g "daemon off;";

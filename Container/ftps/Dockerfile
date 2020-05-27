@@ -2,6 +2,7 @@ FROM alpine
 
 RUN apk add vsftpd openrc openssl
 RUN openrc boot
+RUN apk add telegraf --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted --no-cache
 
 COPY srcs/vsftpd.conf /etc/vsftpd/vsftpd.conf
 VOLUME [ "/sys/fs/cgroup" ]
@@ -21,7 +22,7 @@ RUN chmod a-w /home/admin/ftp
 RUN mkdir /home/admin/ftp/files
 RUN chown admin:admin /home/admin/ftp/files
 RUN echo "admin" | tee -a /etc/vsftpd/vsftpd.userlist
-
+COPY /srcs/telegraf.conf /etc/telegraf.conf.d/
 #CMD service vsftpd start && service vsftpd status && sh
-CMD vsftpd /etc/vsftpd/vsftpd.conf
+CMD service telegraf start; vsftpd /etc/vsftpd/vsftpd.conf
 EXPOSE 21 20 30000-30006

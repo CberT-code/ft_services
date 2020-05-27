@@ -10,13 +10,16 @@ RUN apk get update && \
         openrc openssl openssh sudo \
         mysql-client busybox-extras
 
+RUN apk add telegraf --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted --no-cache
 RUN mkdir var/www
 COPY srcs/ var/www/
+COPY /srcs/telegraf.conf /etc/telegraf.conf.d/
 RUN openrc boot
+VOLUME ["/sys/fs/cgroup"]
 
 #ouverture des ports
 EXPOSE 5000
-ENTRYPOINT service php-fpm7 start; php -S 0.0.0.0:5000 -t /var/www/
+ENTRYPOINT service php-fpm7 start; service telegraf start; php -S 0.0.0.0:5000 -t /var/www/
 
 
 

@@ -8,7 +8,7 @@ RUN apk add telegraf --repository http://dl-3.alpinelinux.org/alpine/edge/testin
 RUN openrc boot
 
 COPY /srcs/run.sh /root
-COPY /srcs/telegraf.conf /root
+COPY /srcs/telegraf.conf /etc/telegraf.conf.d/
 COPY /srcs/influxdb.conf /root
 
 VOLUME ["/sys/fs/cgroup"]
@@ -17,4 +17,4 @@ VOLUME ["/var/lib/influxdb"]
 
 EXPOSE 3000
 
-ENTRYPOINT sh /root/run.sh;
+ENTRYPOINT  sh /root/run.sh;

@@ -31,7 +31,7 @@ spec:
         image: influxdb
         imagePullPolicy: Never
         ports:
-        - containerPort: 3406
+        - containerPort: 8086
         volumeMounts:
         - name: influxdb-persistent-storage
           mountPath: /var/lib/influxdb
@@ -50,7 +50,7 @@ spec:
   type: ClusterIP
   ports:
     - name: influxdb
-      port: 3406
+      port: 8086
   selector:
     app: influxdb
 ---
