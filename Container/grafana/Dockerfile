@@ -18,10 +18,15 @@ VOLUME ["/sys/fs/cgroup"]
 
 RUN openrc boot
 
+#Creating folder for dashboard
+RUN mkdir -p /var/lib/grafana/dashboards
+
 #Copying telegraph conf
 COPY /srcs/telegraf.conf /etc/telegraf.conf.d/
 COPY /srcs/defaults.ini /grafana-6.6.0/conf/
+COPY /srcs/grafana.db /grafana-6.6.0/data/
 COPY /srcs/run.sh /root
+COPY /srcs/dashboard.json /var/lib/grafana/dashboards
 
 #Exposing port
 EXPOSE 3000
