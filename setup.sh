@@ -72,13 +72,13 @@ check_running() {
 
 minikube_start(){
 	print_msg $INFORMATION "Starting Minikube"
-	minikube start --vm-driver=virtualbox --cpus=4 --memory=5000m > /dev/null
+	minikube start --vm-driver=docker --cpus=3 --memory=3000m > /dev/null
 	minikube addons enable metrics-server
 	minikube addons enable ingress
 	minikube addons enable dashboard
 
 	export minikubeip=$(minikube ip)
-	sed -i '' '40d' Container/ftps/srcs/vsftpd.conf | echo  "pasv_address=${minikubeip}" >> Container/ftps/srcs/vsftpd.conf
+	sed -i '40d' Container/ftps/srcs/vsftpd.conf | echo  "pasv_address=${minikubeip}" >> Container/ftps/srcs/vsftpd.conf
 	sed "s/ipminikube/${minikubeip}/g" Container/mysql/srcs/origine.sql > Container/mysql/srcs/wordpress.sql
 	eval $(minikube docker-env)
 	
