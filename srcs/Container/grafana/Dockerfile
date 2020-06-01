@@ -26,7 +26,8 @@ COPY /srcs/telegraf.conf /etc/telegraf.conf.d/
 COPY /srcs/defaults.ini /grafana-6.6.0/conf/
 COPY /srcs/grafana.db /grafana-6.6.0/data/
 COPY /srcs/run.sh /root
-COPY /srcs/dashboard.json /var/lib/grafana/dashboards
+COPY /srcs/dashboard.json /var/lib/grafana/dashboards/default.json
+
 
 #Exposing port
 EXPOSE 3000

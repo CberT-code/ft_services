@@ -12,7 +12,7 @@ spec:
     - name: ftps-port
       port: 21
       targetPort: 21
-      nodePort: 30050
+      nodePort: 21
     - name: ftps00
       port: 30000
       nodePort: 30000

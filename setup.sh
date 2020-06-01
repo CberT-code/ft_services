@@ -18,10 +18,10 @@ clean_yaml() {
 	print_msg $INFORMATION "Cleaning services..."
 	for i in "${array[@]}"
 	do
-		kubectl delete -f Yaml/$i.yaml
+		kubectl delete -f srcs/Yaml/$i.yaml
 		print_msg $ERROR "$i.yaml cleaned."
 	done
-	kubectl delete -f Yaml/ingress.yaml > /dev/null
+	kubectl delete -f srcs/Yaml/ingress.yaml > /dev/null
 	print_msg $ERROR "ingress.yaml cleaned."
 	print_msg $INFORMATION "All services cleaned."
 }
@@ -42,10 +42,10 @@ add_yaml() {
 	print_msg $INFORMATION "Adding services..."
 	for i in "${array[@]}"
 	do
-		kubectl apply -f Yaml/$i.yaml > /dev/null
+		kubectl apply -f srcs/Yaml/$i.yaml > /dev/null
 		print_msg $SUCCESS "$i.yaml added."
 	done
-	kubectl apply -f Yaml/ingress.yaml > /dev/null
+	kubectl apply -f srcs/Yaml/ingress.yaml > /dev/null
 	print_msg $SUCCESS "ingress.yaml added."
 	print_msg $INFORMATION "All dockers added."
 }
@@ -53,7 +53,7 @@ add_dockers() {
 	print_msg $INFORMATION "Adding dockers..."
 	for i in "${array[@]}"
 	do
-		docker build -t $i Container/$i/. > /dev/null
+		docker build -t $i srcs/Container/$i/. > /dev/null
 		print_msg $SUCCESS "Docker $i added."
 	done
 	print_msg $INFORMATION "All dockers added."
@@ -72,14 +72,14 @@ check_running() {
 
 minikube_start(){
 	print_msg $INFORMATION "Starting Minikube"
-	minikube start --vm-driver=docker --cpus=3 --memory=3000m > /dev/null
+	minikube start --vm-driver=docker --cpus=3 --memory=3000m --extra-config=apiserver.service-node-port-range=1-35000 > /dev/null
 	minikube addons enable metrics-server
 	minikube addons enable ingress
 	minikube addons enable dashboard
 
 	export minikubeip=$(minikube ip)
-	sed -i '40d' Container/ftps/srcs/vsftpd.conf | echo  "pasv_address=${minikubeip}" >> Container/ftps/srcs/vsftpd.conf
-	sed "s/ipminikube/${minikubeip}/g" Container/mysql/srcs/origine.sql > Container/mysql/srcs/wordpress.sql
+	sed -i 's/pasv_ad*/pasv_address=${minikubeip}/' srcs/Container/ftps/srcs/vsftpd.conf
+	sed "s/ipminikube/${minikubeip}/g" srcs/Container/mysql/srcs/origine.sql > srcs/Container/mysql/srcs/wordpress.sql
 	eval $(minikube docker-env)
 	
 	print_msg $SUCCESS  "--> minikube has been started"
@@ -144,21 +144,10 @@ then
 			clean_dockers
 			add_dockers
 		fi
-elif [[ $1 == "yaml" ]]
+elif [[ $1 == "service" ]]
 then
 		check_running
 
-		if [[ $2 == "apply" ]]
-		then
-			add_yaml
-		fi
-		if [[ $2 == "delete" ]]
-		then
-			 clean_yaml
-		fi
-		if [[ $2 == "restart" ]]
-		then
-			clean_yaml
-			add_yaml
-		fi
+		kubectl delete -f srcs/Yaml/$2.yaml ; docker rmi -f $2 ; docker build -t $2 srcs/Container/$2/. ; kubectl apply -f srcs/Yaml/$2.yaml
+
 fi

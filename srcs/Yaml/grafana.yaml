@@ -27,10 +27,11 @@ metadata:
   labels:
     app: grafana
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
     - name: grafana
       port: 3000
+      nodePort: 3000
   selector:
     app: grafana
 ---

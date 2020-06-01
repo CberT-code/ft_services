@@ -22,4 +22,4 @@ RUN openrc boot
 EXPOSE 3306
 
 #Starting container witj
-ENTRYPOINT sh /root/run.sh; tail -f /dev/null;
+ENTRYPOINT sh /root/run.sh; tail -f /dev/null

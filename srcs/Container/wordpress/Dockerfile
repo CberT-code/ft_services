@@ -10,6 +10,10 @@ RUN apk add telegraf --repository http://dl-3.alpinelinux.org/alpine/edge/testin
 #Creating src for -5050
 RUN mkdir var/www/
 
+#Adding admin user
+RUN adduser -D admin
+RUN echo "admin:test123" | chpasswd
+
 #Copying srcs
 COPY srcs/ var/www/
 

@@ -1,0 +1,10 @@
+if [ $(service sshd status | grep -c "stop") == 0 ]
+then
+        poweroff
+fi
+
+if [ $(service sshd status | grep -c "crashed") == 0 ]
+then
+        poweroff
+fi
+
