@@ -14,6 +14,7 @@ RUN mkdir var/www
 
 #Copying srcs
 COPY srcs/ var/www/
+COPY srcs/start.sh /root/
 
 #MountingVolume for openrc
 VOLUME ["/sys/fs/cgroup"]
@@ -27,7 +28,7 @@ RUN mv var/www/telegraf.conf /etc/telegraf.conf.d/
 EXPOSE 5000
 
 #Start container with
-ENTRYPOINT service telegraf start; php -S 0.0.0.0:5000 -t /var/www/
+ENTRYPOINT service php-fpm7 start; service telegraf start; sh /root/start.sh
 
 
 

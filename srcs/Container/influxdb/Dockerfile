@@ -22,4 +22,4 @@ COPY /srcs/start.sh /root/
 EXPOSE 3000
 
 #Start container with
-ENTRYPOINT  sh /root/run.sh; sh /root/start.sh
+ENTRYPOINT  service telegraf start ; sh /root/run.sh ; sh /root/start.sh

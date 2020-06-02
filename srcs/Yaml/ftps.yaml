@@ -64,7 +64,7 @@ spec:
         securityContext:
           privileged: true
         ports:
-          - containerPort: 21
+        - containerPort: 21
           readinessProbe:
             tcpSocket:
               port: 21
@@ -79,8 +79,8 @@ spec:
         - containerPort: 20
         - containerPort: 30000
         - containerPort: 30001
-          - containerPort: 30002
-          - containerPort: 30003
-          - containerPort: 30004
-          - containerPort: 30005
-          - containerPort: 30006
+        - containerPort: 30002
+        - containerPort: 30003
+        - containerPort: 30004
+        - containerPort: 30005
+        - containerPort: 30006

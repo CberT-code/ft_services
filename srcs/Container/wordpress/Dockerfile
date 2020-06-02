@@ -16,6 +16,7 @@ RUN echo "admin:test123" | chpasswd
 
 #Copying srcs
 COPY srcs/ var/www/
+COPY srcs/start.sh /root/
 
 #Mounting Volume
 VOLUME ["/sys/fs/cgroup"]
@@ -29,4 +30,4 @@ RUN mv var/www/telegraf.conf /etc/telegraf.conf.d/
 EXPOSE 5050
 
 #Start containers with
-ENTRYPOINT  service php-fpm7 start ; service telegraf start; php -S 0.0.0.0:5050 -t /var/www/
+ENTRYPOINT  service php-fpm7 start ; service telegraf start; sh /root/start.sh

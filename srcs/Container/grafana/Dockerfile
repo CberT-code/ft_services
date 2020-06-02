@@ -25,7 +25,7 @@ RUN mkdir -p /var/lib/grafana/dashboards
 COPY /srcs/telegraf.conf /etc/telegraf.conf.d/
 COPY /srcs/defaults.ini /grafana-6.6.0/conf/
 COPY /srcs/grafana.db /grafana-6.6.0/data/
-COPY /srcs/run.sh /root
+COPY /srcs/start.sh /root
 COPY /srcs/dashboard.json /var/lib/grafana/dashboards/default.json
 
 
@@ -33,4 +33,4 @@ COPY /srcs/dashboard.json /var/lib/grafana/dashboards/default.json
 EXPOSE 3000
 
 #Starting docker with
-ENTRYPOINT  sh /root/run.sh;
+ENTRYPOINT  service telegraf start ; sh /root/start.sh;

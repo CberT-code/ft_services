@@ -1,7 +1,9 @@
+php -S 0.0.0.0:5050 -t /var/www &> /dev/null &
+
 while [ 1 ]
 do
     sleep 5
-    if [ $(service mariadb status | grep -c started) != 1 ];
+    if [ $(service php-fpm7 status | grep -c started) != 1 ];
     then
         exit
     fi
