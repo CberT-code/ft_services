@@ -27,7 +27,7 @@ RUN mv var/www/telegraf.conf /etc/telegraf.conf.d/
 EXPOSE 5000
 
 #Start container with
-ENTRYPOINT service php-fpm7 start; service telegraf start; php -S 0.0.0.0:5000 -t /var/www/
+ENTRYPOINT service telegraf start; php -S 0.0.0.0:5000 -t /var/www/
 
 
 

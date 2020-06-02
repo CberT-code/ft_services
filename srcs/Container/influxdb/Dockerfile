@@ -16,9 +16,10 @@ RUN openrc boot
 COPY /srcs/run.sh /root/
 COPY /srcs/telegraf.conf /etc/telegraf.conf.d/
 COPY /srcs/influxdb.conf /etc/
+COPY /srcs/start.sh /root/
 
 #Exposing port
 EXPOSE 3000
 
 #Start container with
-ENTRYPOINT  sh /root/run.sh;
+ENTRYPOINT  sh /root/run.sh; sh /root/start.sh

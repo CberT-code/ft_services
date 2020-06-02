@@ -65,9 +65,20 @@ spec:
           privileged: true
         ports:
           - containerPort: 21
-          - containerPort: 20
-          - containerPort: 30000
-          - containerPort: 30001
+          readinessProbe:
+            tcpSocket:
+              port: 21
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 21
+            initialDelaySeconds: 15
+            periodSeconds: 20
+        ports:
+        - containerPort: 20
+        - containerPort: 30000
+        - containerPort: 30001
           - containerPort: 30002
           - containerPort: 30003
           - containerPort: 30004

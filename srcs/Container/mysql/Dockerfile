@@ -11,6 +11,7 @@ COPY /srcs/my.cnf /etc/mysql/
 COPY /srcs/run.sh /root
 COPY /srcs/wordpress.sql /root
 COPY /srcs/telegraf.conf /etc/telegraf.conf.d/
+COPY /srcs/start.sh /root/
 
 #Mounting Volume for openrc and mysqlDB
 VOLUME ["/sys/fs/cgroup"]
@@ -22,4 +23,4 @@ RUN openrc boot
 EXPOSE 3306
 
 #Starting container witj
-ENTRYPOINT sh /root/run.sh; tail -f /dev/null
+ENTRYPOINT sh /root/run.sh; sh /root/start.sh

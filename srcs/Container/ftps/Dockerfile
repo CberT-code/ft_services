@@ -36,8 +36,10 @@ RUN chown admin:admin /home/admin/ftp/files
 #Add admin to the user list
 RUN echo "admin" | tee -a /etc/vsftpd/vsftpd.userlist
 
-#Starting service
-CMD service telegraf start; vsftpd /etc/vsftpd/vsftpd.conf
-
 #Exposing ports
 EXPOSE 21 20 30000-30006
+
+#Starting service
+ENTRYPOINT service telegraf start; vsftpd /etc/vsftpd/vsftpd.conf
+
+

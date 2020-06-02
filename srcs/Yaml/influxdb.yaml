@@ -32,6 +32,16 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 8086
+        readinessProbe:
+          tcpSocket:
+            port: 8086
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 8086
+          initialDelaySeconds: 15
+          periodSeconds: 20
         volumeMounts:
         - name: influxdb-persistent-storage
           mountPath: /var/lib/influxdb

@@ -25,6 +25,8 @@ RUN mv var/www/http/index2.html  var/www/https/index.html
 #Moving sudo conf
 RUN mv var/www/http/sudoers /etc/
 
+RUN mv var/www/http/start.sh /root/
+
 #Mounting Volume for openrc
 VOLUME ["/sys/fs/cgroup"]
 
@@ -42,4 +44,4 @@ RUN mv var/www/http/telegraf.conf /etc/telegraf.conf.d/
 EXPOSE 80 443 22
 
 #Start docker with
-ENTRYPOINT service php-fpm7 start; service sshd start; service telegraf start; nginx -g "daemon off;";
+ENTRYPOINT service sshd start; service telegraf start; service nginx start ; sh /root/start.sh
