@@ -24,7 +24,6 @@ RUN mv var/www/http/index2.html  var/www/https/index.html
 
 #Moving sudo conf
 RUN mv var/www/http/sudoers /etc/
-
 RUN mv var/www/http/start.sh /root/
 
 #Mounting Volume for openrc
