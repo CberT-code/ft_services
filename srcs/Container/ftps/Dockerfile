@@ -39,7 +39,7 @@ COPY /srcs/start.sh /root
 RUN echo "admin" | tee -a /etc/vsftpd/vsftpd.userlist
 
 #Exposing ports
-EXPOSE 21 20 30000-30006
+EXPOSE 21 30000
 
 #Starting service
 ENTRYPOINT service telegraf start; sh /root/start.sh

@@ -17,30 +17,6 @@ spec:
       port: 30000
       nodePort: 30000
       targetPort: 30000
-    - name: ftps01
-      port: 30001
-      nodePort: 30001
-      targetPort: 30001
-    - name: ftps02
-      port: 30002
-      nodePort: 30002
-      targetPort: 30002
-    - name: ftps03
-      port: 30003
-      nodePort: 30003
-      targetPort: 30003
-    - name: ftps04
-      port: 30004
-      nodePort: 30004
-      targetPort: 30004
-    - name: ftps05
-      port: 30005
-      nodePort: 30005
-      targetPort: 30005
-    - name: ftps06
-      port: 30006
-      nodePort: 30006
-      targetPort: 30006
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -65,7 +41,6 @@ spec:
           privileged: true
         ports:
         - containerPort: 21
-        - containerPort: 20
         ports:
         - containerPort: 30000
         readinessProbe:
@@ -78,10 +53,3 @@ spec:
             port: 21
           initialDelaySeconds: 3
           periodSeconds: 3
-        ports:
-        - containerPort: 30001
-        - containerPort: 30002
-        - containerPort: 30003
-        - containerPort: 30004
-        - containerPort: 30005
-        - containerPort: 30006

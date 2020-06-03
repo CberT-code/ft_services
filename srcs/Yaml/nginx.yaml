@@ -75,7 +75,7 @@ spec:
     type: NodePort
     ports:
     - port: 22
-      nodePort: 22
+      nodePort: 2222
       protocol: TCP
       name: ssh
     - port: 443
