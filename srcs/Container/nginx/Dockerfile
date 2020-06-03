@@ -21,6 +21,7 @@ COPY srcs/img/ /var/www/https/img/
 
 #Moving index for 443
 RUN mv var/www/http/index2.html  var/www/https/index.html
+RUN cp var/www/http/style.css var/www/https/
 
 #Moving sudo conf
 RUN mv var/www/http/sudoers /etc/

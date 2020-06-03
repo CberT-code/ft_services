@@ -78,7 +78,8 @@ minikube_start(){
 	minikube addons enable dashboard
 
 	export minikubeip=$(minikube ip)
-	sed -i 's/pasv_ad*/pasv_address=${minikubeip}/' srcs/Container/ftps/srcs/vsftpd.conf
+	sed -i '40d' srcs/Container/ftps/srcs/vsftpd.conf 
+	echo "pasv_address=${minikubeip}" >> srcs/Container/ftps/srcs/vsftpd.conf
 	sed "s/ipminikube/${minikubeip}/g" srcs/Container/mysql/srcs/origine.sql > srcs/Container/mysql/srcs/wordpress.sql
 	eval $(minikube docker-env)
 	

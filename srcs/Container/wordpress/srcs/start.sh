@@ -1,5 +1,6 @@
 php -S 0.0.0.0:5050 -t /var/www &> /dev/null &
 
+sleep 20
 while [ 1 ]
 do
     sleep 5

@@ -1,3 +1,5 @@
+
+sleep 20
 while [ 1 ]
 do
     sleep 5

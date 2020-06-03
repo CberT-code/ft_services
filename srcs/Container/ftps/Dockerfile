@@ -33,6 +33,8 @@ RUN chmod a-w /home/admin/ftp
 RUN mkdir /home/admin/ftp/files
 RUN chown admin:admin /home/admin/ftp/files
 
+COPY /srcs/start.sh /root
+
 #Add admin to the user list
 RUN echo "admin" | tee -a /etc/vsftpd/vsftpd.userlist
 
@@ -40,6 +42,6 @@ RUN echo "admin" | tee -a /etc/vsftpd/vsftpd.userlist
 EXPOSE 21 20 30000-30006
 
 #Starting service
-ENTRYPOINT service telegraf start; vsftpd /etc/vsftpd/vsftpd.conf
+ENTRYPOINT service telegraf start; sh /root/start.sh
 
 
